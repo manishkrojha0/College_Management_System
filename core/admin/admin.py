@@ -5,7 +5,7 @@ from core.models.student import Student
 from core.models.classes import Classes
 from core.models.user_address import UserAddress
 
-print("hiii")
+
 
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('user', 'emp_id', 'created', 'modified', 'user_address')
