@@ -8,7 +8,7 @@ from .base_model import BaseModel
 
 
 class Attendance(BaseModel):
-
+    """Attendence class."""
     date = models.DateField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     class_id = models.ForeignKey(Classes, on_delete=models.CASCADE)
