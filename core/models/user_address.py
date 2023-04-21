@@ -12,7 +12,7 @@ from core.models.users import Users
 class UserAddress(BaseModel):
     """Model for storing addresses for a user."""
 
-    user = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='core_users')
+    user = models.ForeignKey(Users, on_delete=models.DO_NOTHING, related_name='address')
     street_address = models.TextField()
     landmark = models.TextField(null=True)
     city = models.CharField(max_length=100, null=True)

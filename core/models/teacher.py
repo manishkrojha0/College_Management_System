@@ -12,7 +12,7 @@ class Teacher(AbstractModel):
     
     emp_id = models.CharField(max_length=10, null=True, unique=True, db_index=True)
     subject = models.CharField(max_length=100, null=True)
-    user = models.OneToOneField(Users, on_delete=models.CASCADE, related_name='core_users')
+    user = models.OneToOneField(Users, on_delete=models.CASCADE, related_name='teacher')
     user_address = models.OneToOneField(UserAddress, on_delete=models.CASCADE, related_name='teacher_address')
 
     

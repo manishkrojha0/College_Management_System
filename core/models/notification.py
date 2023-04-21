@@ -12,7 +12,7 @@ class Notification(BaseModel):
 
     title = models.CharField(max_length=200, null=True)
     message = models.TextField(null=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True, related_name='core_users')
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True, related_name='notification')
     read = models.BooleanField(default=False, null=True)
     class_attendance = models.ForeignKey('Classes', on_delete=models.CASCADE, null=True, blank=True)
 

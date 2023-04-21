@@ -11,7 +11,7 @@ class Student(AbstractModel):
     """Model class for teacher."""
 
     roll_no = models.CharField(max_length=10, null=True, unique=True, db_index=True)
-    user = models.OneToOneField(Users, on_delete=models.CASCADE, related_name='core_users')
+    user = models.OneToOneField(Users, on_delete=models.CASCADE, related_name='student')
     user_address = models.OneToOneField(UserAddress, on_delete=models.CASCADE, related_name='student_address')
 
     def __str__(self):
