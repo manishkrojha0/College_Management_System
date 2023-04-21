@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group, Permission
 class Users(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
-    groups = models.ManyToManyField(Group, related_name='core_users')
+    groups = models.ManyToManyField(Group, related_name='groups')
 
     user_permissions = models.ManyToManyField(
         Permission,
