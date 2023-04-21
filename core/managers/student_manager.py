@@ -1,7 +1,7 @@
 """Manager file for student model."""
-from models.student import student
+from core.models.student import Student
 
-class studentManager(object):
+class StudentManager(object):
     """class of student manager."""
 
     def __init__(self) -> None:
@@ -10,7 +10,7 @@ class studentManager(object):
     def load_by_id(self, id):
         """laod student by id."""
         try:
-            student_obj = student.objects.get(pk=id)
+            student_obj = Student.objects.get(pk=id)
         except Exception:
             student_obj = None
         
@@ -19,7 +19,7 @@ class studentManager(object):
     def load_all(self):
         """Load all the students."""
         try:
-            student_objs = student.objects.all()
+            student_objs = Student.objects.all()
         except Exception:
             student_objs = None
         
@@ -28,7 +28,7 @@ class studentManager(object):
     def load_by_roll_no(self, emp_id):
         """Load student by roll id."""
         try:
-            student_obj = student.objects.get(roll_no=emp_id)
+            student_obj = Student.objects.get(roll_no=emp_id)
         except Exception:
             student_obj = None
         

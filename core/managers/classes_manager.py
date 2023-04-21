@@ -1,5 +1,5 @@
 """Manager file for classes."""
-from models.classes import Classes
+from core.models.classes import Classes
 
 
 class ClassesManager(object):
@@ -25,4 +25,4 @@ class ClassesManager(object):
             class_objs = None
         
         return class_objs
-        
+

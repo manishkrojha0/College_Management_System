@@ -5,3 +5,4 @@ from .student import Student
 from .classes import Classes
 from .attendence import Attendance
 from .notification import Notification
+from .users import Users

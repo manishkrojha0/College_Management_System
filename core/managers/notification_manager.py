@@ -1,6 +1,6 @@
 """Manager file for notification manager."""
 
-from models.notification import Notification
+from core.models.notification import Notification
 
 class NotificationManager(object):
     """Notification manager class."""
@@ -25,4 +25,4 @@ class NotificationManager(object):
             noti_objs = None
         
         return noti_objs
-        
+

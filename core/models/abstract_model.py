@@ -16,4 +16,3 @@ class AbstractModel(BaseModel):
 
     class Meta(BaseModel.Meta):
         abstract = True
-

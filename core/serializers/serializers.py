@@ -9,48 +9,117 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'email']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = ['street_address', 'landmark', 'city', 'pincode']
+        
+    def create(self, validated_data):
+        print(validated_data)
+        address = User.objects.create_user(
+            street_address=validated_data['street_address'],
+            landmark=validated_data['landmark'],
+            city=validated_data['city'],
+            pincode=validated_data['pincode']
+        )
+        return address
 
 class TeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    full_name = serializers.SerializerMethodField()
-
-    def get_full_name(self, teacher):
-        """Get full name of student."""
-        teacher_obj = Teacher.objects.get(teacher)
-        if not teacher_obj:
-            return ""
-        first_name = teacher_obj.first_name
-        middle_name = teacher_obj.middle_name
-        last_name = teacher_obj.last_name
-        full_name = first_name + " " + last_name if not middle_name else first_name + " "+ middle_name + " "  + last_name
-        return full_name
+    user_address = UserAddressSerializer()
+    exclude = ('user',)
 
     class Meta:
         model = Teacher
-        fields = ['id', 'user', 'emp_id']
+        fields = '__all__'
+
+    def create(self, validated_data):
+
+        user_data = validated_data.pop('user')
+        user_address_data = validated_data.pop('user_address')
+        
+
+        user_serializer = UserSerializer(data={'username': user_data['username'], 'email': user_data['email'], 'password': user_data['password']})
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        user_address_data["user"] = user.id
+        user_address = UserAddressSerializer(data=user_address_data)
+        user_address.is_valid(raise_exception=True)
+        user_address = user_address.save()
+
+
+        teacher = Teacher.objects.create(user_id=user.id, user_address=user_address, **validated_data)
+
+        return teacher
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        user_address_data = validated_data.pop('user_address', None)
+
+        if user_data:
+            user = instance.user
+            user_serializer = UserSerializer(user, data=user_data)
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+            user_address_data['user'] = user.id
+
+        if user_address_data:
+            user_address = instance.user_address
+            user_address_serializer = UserAddressSerializer(user_address, data=user_address_data)
+            user_address_serializer.is_valid(raise_exception=True)
+            user_address_serializer.save()
+
+        return super().update(instance, validated_data)
+
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    full_name = serializers.SerializerMethodField()
-
-    def get_full_name(self, student):
-        """Get full name of student."""
-        student_obj = Student.objects.get(student)
-        first_name = student_obj.first_name
-        middle_name = student_obj.middle_name
-        last_name = student_obj.last_name
-        full_name = first_name + " " + last_name if not middle_name else first_name + " "+ middle_name + " "  + last_name
-        return full_name
+    user_address = UserAddressSerializer()
 
     class Meta:
         model = Student
-        fields = ['id', 'user', 'roll_no', 'full_name']
+        fields = '__all__'
+    
+        def create(self, validated_data):
+
+            user_data = validated_data.pop('user')
+            user_address_data = validated_data.pop('user_address')
+            
+
+            user_serializer = UserSerializer(data={'username': user_data['username'], 'email': user_data['email'], 'password': user_data['password']})
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer.save()
+            user_address_data["user"] = user.id
+            user_address = UserAddressSerializer(data=user_address_data)
+            user_address.is_valid(raise_exception=True)
+            user_address = user_address.save()
+
+
+            teacher = Student.objects.create(user_id=user.id, user_address=user_address, **validated_data)
+
+            return teacher
 
 class ClassSerializer(serializers.ModelSerializer):
-    teacher = TeacherSerializer(many=True)
-    students = StudentSerializer(many=True)
+    teacher_class = TeacherSerializer(many=True)
+    student_class = StudentSerializer(many=True)
 
     class Meta:
         model = Classes
-        fields = ['id', 'name', 'teacher', 'student']
+        fields = '__all__'
+    
+
+
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = '__all__'
